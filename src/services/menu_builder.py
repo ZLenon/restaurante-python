@@ -24,6 +24,23 @@ class MenuBuilder:
 
         self.inventory.consume_recipe(curr_dish.recipe)
 
-    # Req 4
+    # Requisito 4
     def get_main_menu(self, restriction=None) -> List[Dict]:
-        pass
+        cardapio = []
+        for pratos in self.menu_data.dishes:
+            if restriction not in pratos.get_restrictions():
+                # A função all() é usada para verificar se todos os valores
+                # dentro do gerador são verdadeiros
+                if all(
+                    self.inventory.inventory.get(ingredient, 0) > 0
+                    for ingredient in pratos.get_ingredients()
+                ):
+                    cardapio.append(
+                        {
+                            "restrictions": pratos.get_restrictions(),
+                            "ingredients": pratos.get_ingredients(),
+                            "dish_name": pratos.name,
+                            "price": pratos.price,
+                        }
+                    )
+        return cardapio
